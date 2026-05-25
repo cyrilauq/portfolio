@@ -1,6 +1,9 @@
 <template>
-  <section id="home" class="flex flex-row justify-center gap-28 w-full">
-    <div class="w-1/2 flex flex-col gap-6 text-left">
+  <section
+    id="home"
+    class="flex flex-col-reverse md:flex-row justify-center gap-28 w-full text-justify"
+  >
+    <div class="md:w-1/2 flex flex-col gap-6 text-justify">
       <p>Hi, my name is</p>
       <h1 class="text-3xl font-bold uppercase text-yellow-300 tracking-widest">Auquier Cyril</h1>
       <p>

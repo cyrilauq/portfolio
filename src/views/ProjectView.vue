@@ -25,7 +25,7 @@ const projects = ref([
 <template>
   <section id="projects" class="w-full flex flex-col justify-center">
     <h2 class="text-yellow-300 text-xl tracking-widest my-2">Recent projects</h2>
-    <div class="flex flex-row gap-8 justify-center text-left">
+    <div class="flex md:flex-row flex-wrap gap-8 justify-center text-left">
       <article
         class="flex flex-col items-center w-80 gap-2"
         v-for="project in projects"

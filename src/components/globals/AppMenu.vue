@@ -21,7 +21,7 @@ const links = ref([
 ])
 </script>
 <template>
-  <nav class="w-full flex justify-center py-4">
+  <nav class="w-full flex justify-center py-4 top-0 sticky bg-gray-800">
     <ul class="flex flex-row">
       <li
         v-for="link in links"

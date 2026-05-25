@@ -10,49 +10,49 @@ import SkillsView from '../views/SkillsView.vue'
         class="h-screen w-screen flex flex-col text-center bg-gray-800 text-gray-300 overflow-y-auto"
     >
         <AppMenu />
-        <div class="flex flex-col gap-8 py-4 px-8 h-full justify-center items-center w-full">
-        <PresentationView />
-        <section id="strengths">
-            <h2 class="text-yellow-300 text-xl tracking-widest my-2">Strengths</h2>
-            <div class="flex flex-row gap-4 justify-center">
-            <article class="w-1/4">
-                <h3>Curious</h3>
-                <p>
-                I like to learn new technologies or new working methods which means I am not fully
-                closed when I need/have to use unknow tools
-                </p>
-            </article>
-            <article class="w-1/4">
-                <h3>Asking question</h3>
-                <p>
-                I prefer asking question to understand what I have to do instead of blindly do my
-                tasks and go opposite of what the client want
-                </p>
-            </article>
-            </div>
-        </section>
-        <SkillsView />
-        <ProjectView />
-        <section id="contact" class="w-full flex flex-col justify-center">
-            <h2 class="text-yellow-300 text-xl tracking-widest my-2">Links</h2>
-            <p>For contact me or see thing I can do, you can click one of the links bellow:</p>
-            <ul class="flex flex-row gap-4 justify-center mt-2">
-            <li>
-                <a href="https://github.com/cyrilauq" class="hover:text-yellow-300" target="_blank"
-                >Github</a
-                >
-            </li>
-            <li>
-                <a
-                href="https://www.linkedin.com/in/cyrilauquier"
-                class="hover:text-yellow-300"
-                target="_blank"
-                >Linkedin</a
-                >
-            </li>
-            <li><a href="mailto:cyrilauquier@hotmail.fr" class="hover:text-yellow-300">Mail</a></li>
-            </ul>
-        </section>
+        <div class="flex flex-col gap-8 py-4 px-8 h-full md:justify-center items-center w-full">
+            <PresentationView />
+            <section id="strengths">
+                <h2 class="text-yellow-300 text-xl tracking-widest my-2">Strengths</h2>
+                <div class="flex flex-row gap-4 justify-center text-justify">
+                <article class="md:w-1/4 w-1/2">
+                    <h3>Curious</h3>
+                    <p>
+                    I like to learn new technologies or new working methods which means I am not fully
+                    closed when I need/have to use unknow tools
+                    </p>
+                </article>
+                <article class="md:w-1/4 w-1/2">
+                    <h3>Asking question</h3>
+                    <p>
+                    I prefer asking question to understand what I have to do instead of blindly do my
+                    tasks and go opposite of what the client want
+                    </p>
+                </article>
+                </div>
+            </section>
+            <SkillsView />
+            <ProjectView />
+            <section id="contact" class="w-full flex flex-col justify-center">
+                <h2 class="text-yellow-300 text-xl tracking-widest my-2">Links</h2>
+                <p>For contact me or see thing I can do, you can click one of the links bellow:</p>
+                <ul class="flex flex-row gap-4 justify-center mt-2">
+                <li>
+                    <a href="https://github.com/cyrilauq" class="hover:text-yellow-300" target="_blank"
+                    >Github</a
+                    >
+                </li>
+                <li>
+                    <a
+                    href="https://www.linkedin.com/in/cyrilauquier"
+                    class="hover:text-yellow-300"
+                    target="_blank"
+                    >Linkedin</a
+                    >
+                </li>
+                <li><a href="mailto:cyrilauquier@hotmail.fr" class="hover:text-yellow-300">Mail</a></li>
+                </ul>
+            </section>
         </div>
     </div>
 </Layout>

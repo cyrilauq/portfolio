@@ -24,7 +24,7 @@ const skills = ref([
 <template>
   <section id="skills" class="w-full flex flex-col justify-center">
     <h2 class="text-yellow-300 text-xl tracking-widest my-2">Key skills</h2>
-    <div class="flex flex-row gap-16 justify-center text-left">
+    <div class="flex md:flex-row flex-wrap gap-16 justify-center text-left">
       <article v-for="skill in skills" :key="skill.familyName">
         <h3 class="my-2">{{ skill.familyName }}</h3>
         <ul class="list-disc">
