@@ -2,18 +2,22 @@
 import { defineConfig } from 'astro/config'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
+import node from '@astrojs/node'
 
 import vue from '@astrojs/vue'
 
 export default defineConfig({
   output: 'server',
+  adapter: node({
+    mode: 'standalone',
+  }),
   server: {
     host: true, // Force l'écoute sur 0.0.0.0
     port: 4321,
   },
   integrations: [vue()],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss({ optimize: true })],
     resolve: {
       alias: {
         '@': path.resolve('./src'),
