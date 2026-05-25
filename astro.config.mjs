@@ -6,11 +6,11 @@ import node from '@astrojs/node'
 
 import vue from '@astrojs/vue'
 
+import vercel from '@astrojs/vercel';
+
 export default defineConfig({
   output: 'server',
-  adapter: node({
-    mode: 'standalone',
-  }),
+  adapter: vercel(),
   server: {
     host: true, // Force l'écoute sur 0.0.0.0
     port: 4321,
