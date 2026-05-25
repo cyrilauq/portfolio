@@ -6,7 +6,7 @@ import node from '@astrojs/node'
 
 import vue from '@astrojs/vue'
 
-import vercel from '@astrojs/vercel';
+import vercel from '@astrojs/vercel'
 
 export default defineConfig({
   output: 'server',
@@ -17,7 +17,7 @@ export default defineConfig({
   },
   integrations: [vue()],
   vite: {
-    plugins: [tailwindcss({ optimize: true })],
+    plugins: [tailwindcss()],
     resolve: {
       alias: {
         '@': path.resolve('./src'),
