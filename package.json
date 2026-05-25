@@ -4,10 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
-    "build-only": "vite build",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
     "type-check": "vue-tsc --build",
     "lint": "run-s lint:*",
     "lint:oxlint": "oxlint . --fix",
@@ -15,6 +14,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@astrojs/vue": "^6.0.1",
     "@tailwindcss/vite": "^4.3.0",
     "vue": "^3.5.32"
   },
