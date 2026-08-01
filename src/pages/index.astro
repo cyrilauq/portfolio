@@ -4,6 +4,7 @@ import AppMenu from '../components/globals/AppMenu.vue'
 import PresentationView from '../views/PresentationView.vue'
 import ProjectView from '../views/ProjectView.vue'
 import SkillsView from '../views/SkillsView.vue'
+import ExperiencesView from '../views/ExperiencesView.vue'
 ---
 <Layout>
     <div
@@ -33,6 +34,7 @@ import SkillsView from '../views/SkillsView.vue'
             </section>
             <SkillsView />
             <ProjectView />
+            <ExperiencesView client:load />
             <section id="contact" class="w-full flex flex-col justify-center">
                 <h2 class="text-yellow-300 text-xl tracking-widest my-2">Links</h2>
                 <p>For contact me or see thing I can do, you can click one of the links bellow:</p>

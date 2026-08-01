@@ -18,6 +18,10 @@ const links = ref([
     path: '#contact',
     name: 'Contact',
   },
+  {
+    path: '#experiences',
+    name: 'Experiences',
+  },
 ])
 </script>
 <template>
