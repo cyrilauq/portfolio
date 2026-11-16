@@ -1,88 +1,93 @@
 <script lang="ts" setup>
-import AppSlider from '@/components/sliders/AppSlider.vue'
-import { ref } from 'vue'
+import SectionHeading from '@/components/globals/SectionHeading.vue'
+import TagList from '@/components/globals/TagList.vue'
 
-const experiences = ref([
+interface Experience {
+  name: string
+  from: string
+  to?: string
+  place: string
+  description?: string
+  skills: string[]
+}
+
+// Most recent first
+const experiences: Experience[] = [
   {
-    name: "Bachelor's Degree in Application Development",
-    from: '2021',
-    to: '2025',
-    place: 'HELMO Campus Guillemins',
-    description: '',
+    name: 'Software Developer',
+    from: '02/2025',
+    to: '10/2026',
+    place: 'EDPI',
+    description:
+      'I maintained existing applications, adapted features to what clients actually needed, integrated third-party services such as GLS, and built new applications as the business grew.',
     skills: [
-      'ASP.NET CORE',
+      'ASP.NET Core',
+      'TypeScript',
+      'Angular',
+      'Electron',
+      '.NET MAUI',
+      'PostgreSQL',
+      'IIS',
+      'Requirements analysis',
+      'Project management',
+    ],
+  },
+  {
+    name: 'End-of-studies internship',
+    from: '02/2024',
+    to: '05/2024',
+    place: 'Mission Target',
+    description:
+      'Built two applications with Blazor WebAssembly and .NET MAUI for service and time tracking, usable both online and offline.',
+    skills: [
+      'ASP.NET Core',
+      'Blazor WebAssembly',
+      '.NET MAUI',
+      'Azure Web Apps',
+      'Requirements analysis',
+    ],
+  },
+  {
+    name: "Bachelor's degree in Application Development",
+    from: '2021',
+    to: '2024',
+    place: 'HELMO Campus Guillemins',
+    skills: [
+      'ASP.NET Core',
       'PHP',
       'JavaScript',
       'Kotlin',
-      'Requirements Analysis',
       'SQL',
       'MySQL',
+      'Requirements analysis',
     ],
   },
-  {
-    name: 'End-of-Studies Internship',
-    from: '02/2025',
-    to: '05/2025',
-    place: 'Mission Target',
-    description:
-      'Development of two applications using Blazor WebAssembly and .NET MAUI, enabling service/time tracking as well as online/offline usability.',
-    skills: [
-      'ASP.NET CORE',
-      '.NET Blazor Web Assembly',
-      '.NET MAUI',
-      'Azure Web Apps',
-      'Requirements Analysis',
-      'Troubleshooting & Quick Problem-Solving',
-    ],
-  },
-  {
-    name: 'Software Developer',
-    from: '02/2026',
-    place: 'EDPI',
-    description:
-      'Maintaining existing applications, adapting existing features to better meet client needs, integrating third-party services (e.g., GLS), and building new applications to support growing business requirements.',
-    skills: [
-      'ASP.NET CORE',
-      'JavaScript',
-      'TypeScript',
-      'Electron JS',
-      'Angular',
-      '.NET MAUI',
-      'Requirements Analysis',
-      'Troubleshooting & Quick Problem-Solving',
-      'PostgreSQL',
-      'IIS',
-      'Project Management',
-    ],
-  },
-])
+]
 </script>
 
 <template>
-  <section id="experiences" class="w-full flex flex-col justify-center">
-    <h2 class="text-yellow-300 text-xl tracking-widest my-2">My experiences</h2>
-    <div class="flex flex-col gap-8 justify-center text-left items-center">
-      <article
-        class="flex flex-col items-center md:w-1/3 gap-2"
-        v-for="experience in experiences"
-        :key="experience.name"
-      >
-        <div class="flex flex-row self-start w-full justify-between">
-          <h3 v-if="experience.name">{{ experience.name }} ({{ experience.place }})</h3>
-          <h3 v-else>{{ experience.place }}</h3>
-          <span class="w-40 text-right"
-            >{{ experience.from }} - {{ experience.to ?? 'Today' }}</span
-          >
+  <section id="experiences" class="py-16">
+    <SectionHeading eyebrow="Work and education" title="Experience" />
+    <ol class="relative ml-2 border-l border-gray-700">
+      <li v-for="experience in experiences" :key="experience.name" class="relative pb-12 pl-8 last:pb-0">
+        <span aria-hidden="true" :class="[
+          'absolute top-1.5 -left-[7.5px] size-3.5 rounded-full ring-4 ring-gray-800',
+          experience.to ? 'bg-gray-500' : 'bg-yellow-300',
+        ]" />
+        <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+          <h3 class="text-lg font-semibold text-gray-100">
+            {{ experience.name }}
+            <span class="font-normal text-yellow-300">· {{ experience.place }}</span>
+          </h3>
+          <p class="shrink-0 text-sm text-gray-400 tabular-nums">
+            {{ experience.from }} — {{ experience.to ?? 'Present' }}
+          </p>
         </div>
-        <p class="justify-start">{{ experience.description }}</p>
-        <AppSlider :items="experience.skills" :items-to-show="4" :auto-play-interval="3500">
-          <template #card="{ item }">
-            <div>
-              <p>{{ item }}</p>
-            </div>
-          </template>
-        </AppSlider>
-      </article>
-    </div>
+        <p v-if="experience.description" class="mt-3 max-w-3xl leading-relaxed">
+          {{ experience.description }}
+        </p>
+        <TagList :items="experience.skills" label="Skills used" class="mt-4" />
+      </li>
+    </ol>
   </section>
 </template>

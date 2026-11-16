@@ -1,36 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import AppCard from '@/components/globals/AppCard.vue'
+import SectionHeading from '@/components/globals/SectionHeading.vue'
+import TagList from '@/components/globals/TagList.vue'
 
-const skills = ref([
-  {
-    familyName: 'Javascript',
-    items: ['Angular', 'Vue.JS 3'],
-  },
-  {
-    familyName: '.NET',
-    items: ['.NET MAUI', 'C#', 'ASP.NET CORE', 'WPF', 'Blazor'],
-  },
-  {
-    familyName: 'Deploiement',
-    items: ['Github', 'Azure Web Apps', 'Docker', 'Vercel'],
-  },
-  {
-    familyName: 'Databases',
-    items: ['MySQL', 'PostgreSQL'],
-  },
-])
+interface SkillFamily {
+  familyName: string
+  items: string[]
+}
+
+const skills: SkillFamily[] = [
+  { familyName: '.NET', items: ['C#', 'ASP.NET Core', 'Blazor', '.NET MAUI', 'WPF'] },
+  { familyName: 'JavaScript', items: ['TypeScript', 'Vue.js 3', 'Angular', 'Electron'] },
+  { familyName: 'Deployment', items: ['GitHub', 'Docker', 'Azure Web Apps', 'IIS', 'Vercel'] },
+  { familyName: 'Databases', items: ['PostgreSQL', 'MySQL'] },
+]
 </script>
 
 <template>
-  <section id="skills" class="w-full flex flex-col justify-center">
-    <h2 class="text-yellow-300 text-xl tracking-widest my-2">Key skills</h2>
-    <div class="flex md:flex-row flex-wrap gap-16 justify-center text-left">
-      <article v-for="skill in skills" :key="skill.familyName">
-        <h3 class="my-2">{{ skill.familyName }}</h3>
-        <ul class="list-disc">
-          <li v-for="item in skill.items" :key="item">{{ item }}</li>
-        </ul>
-      </article>
+  <section id="skills" class="py-16">
+    <SectionHeading eyebrow="What I work with" title="Skills" />
+    <div class="grid gap-6 sm:grid-cols-2">
+      <AppCard v-for="skill in skills" :key="skill.familyName">
+        <h3 class="mb-4 text-lg font-semibold text-gray-100">{{ skill.familyName }}</h3>
+        <TagList :items="skill.items" size="sm" />
+      </AppCard>
     </div>
   </section>
 </template>

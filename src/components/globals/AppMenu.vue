@@ -1,39 +1,36 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
-const links = ref([
-  {
-    path: '#home',
-    name: 'Home',
-  },
-  {
-    path: '#skills',
-    name: 'Skills',
-  },
-  {
-    path: '#projects',
-    name: 'Projects',
-  },
-  {
-    path: '#contact',
-    name: 'Contact',
-  },
-  {
-    path: '#experiences',
-    name: 'Experiences',
-  },
-])
+const links = [
+  { path: '#skills', name: 'Skills' },
+  { path: '#projects', name: 'Projects' },
+  { path: '#experiences', name: 'Experience' },
+  { path: '#contact', name: 'Contact' },
+]
 </script>
+
 <template>
-  <nav class="w-full flex justify-center py-4 top-0 sticky bg-gray-800">
-    <ul class="flex flex-row">
-      <li
-        v-for="link in links"
-        :key="link.name"
-        class="hover:text-yellow-300 w-24 px-4 py-2 hover:bg-gray-50/50 rounded-md"
+  <header
+    class="sticky top-0 z-50 border-b border-gray-700/60 bg-gray-800/85 backdrop-blur supports-[backdrop-filter]:bg-gray-800/70"
+  >
+    <nav
+      aria-label="Main"
+      class="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4 md:px-8"
+    >
+      <a
+        href="#home"
+        class="shrink-0 rounded-md font-bold tracking-wider text-yellow-300 focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:outline-none"
       >
-        <a :href="link.path">{{ link.name }}</a>
-      </li>
-    </ul>
-  </nav>
+        CA<span class="text-gray-400">.</span>
+      </a>
+      <ul class="-mr-2 flex items-center gap-1 overflow-x-auto text-sm md:text-base">
+        <li v-for="link in links" :key="link.name">
+          <a
+            :href="link.path"
+            class="block rounded-md px-3 py-2 whitespace-nowrap transition-colors hover:bg-gray-700/60 hover:text-yellow-300 focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:outline-none"
+          >
+            {{ link.name }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
 </template>

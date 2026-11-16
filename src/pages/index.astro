@@ -1,60 +1,80 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import AppMenu from '../components/globals/AppMenu.vue'
-import PresentationView from '../views/PresentationView.vue'
-import ProjectView from '../views/ProjectView.vue'
-import SkillsView from '../views/SkillsView.vue'
-import ExperiencesView from '../views/ExperiencesView.vue'
+import AppMenu from '@/components/globals/AppMenu.vue'
+import AppButton from '@/components/globals/AppButton.vue'
+import AppCard from '@/components/globals/AppCard.vue'
+import SectionHeading from '@/components/globals/SectionHeading.vue'
+import PresentationView from '@/views/PresentationView.vue'
+import ProjectView from '@/views/ProjectView.vue'
+import SkillsView from '@/views/SkillsView.vue'
+import ExperiencesView from '@/views/ExperiencesView.vue'
+import { contactLinks } from '@/data/contact'
+
+const strengths = [
+  {
+    title: 'I pick things up fast',
+    text: "I like learning new technologies and ways of working, so an unfamiliar tool or codebase doesn't stop me for long.",
+  },
+  {
+    title: 'I ask before I build',
+    text: "I'd rather ask a question early than spend a week building something the client didn't want.",
+  },
+]
 ---
+
 <Layout>
-    <div
-        class="h-screen w-screen flex flex-col text-center bg-gray-800 text-gray-300 overflow-y-auto"
-    >
-        <AppMenu />
-        <div class="flex flex-col gap-8 py-4 px-8 h-full items-center w-full">
-            <PresentationView />
-            <section id="strengths">
-                <h2 class="text-yellow-300 text-xl tracking-widest my-2">Strengths</h2>
-                <div class="flex flex-row gap-4 justify-center text-justify">
-                <article class="md:w-1/4 w-1/2">
-                    <h3>Curious</h3>
-                    <p>
-                    I like to learn new technologies or new working methods which means I am not fully
-                    closed when I need/have to use unknow tools
-                    </p>
-                </article>
-                <article class="md:w-1/4 w-1/2">
-                    <h3>Asking question</h3>
-                    <p>
-                    I prefer asking question to understand what I have to do instead of blindly do my
-                    tasks and go opposite of what the client want
-                    </p>
-                </article>
-                </div>
-            </section>
-            <SkillsView />
-            <ProjectView />
-            <ExperiencesView client:load />
-            <section id="contact" class="w-full flex flex-col justify-center">
-                <h2 class="text-yellow-300 text-xl tracking-widest my-2">Links</h2>
-                <p>For contact me or see thing I can do, you can click one of the links bellow:</p>
-                <ul class="flex flex-row gap-4 justify-center mt-2">
-                <li>
-                    <a href="https://github.com/cyrilauq" class="hover:text-yellow-300" target="_blank"
-                    >Github</a
-                    >
-                </li>
-                <li>
-                    <a
-                    href="https://www.linkedin.com/in/cyrilauquier"
-                    class="hover:text-yellow-300"
-                    target="_blank"
-                    >Linkedin</a
-                    >
-                </li>
-                <li><a href="mailto:cyrilauquier@hotmail.fr" class="hover:text-yellow-300">Mail</a></li>
-                </ul>
-            </section>
-        </div>
-    </div>
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-md focus:bg-yellow-300 focus:px-4 focus:py-2 focus:text-gray-900"
+  >
+    Skip to content
+  </a>
+  <AppMenu />
+  <main id="main" class="mx-auto max-w-5xl px-4 md:px-8">
+    <PresentationView />
+
+    <section id="strengths" class="py-16">
+      <SectionHeading eyebrow="About me" title="How I work" />
+      <div class="grid gap-6 md:grid-cols-2">
+        {
+          strengths.map((s) => (
+            <AppCard>
+              <h3 class="mb-2 text-lg font-semibold text-gray-100">{s.title}</h3>
+              <p class="leading-relaxed">{s.text}</p>
+            </AppCard>
+          ))
+        }
+      </div>
+    </section>
+
+    <SkillsView />
+    <ProjectView />
+    <ExperiencesView />
+
+    <section id="contact" class="py-24 text-center">
+      <h2 class="text-3xl font-bold text-gray-100 md:text-4xl">Get in touch</h2>
+      <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed">
+        Email is the fastest way to reach me. My code is on GitHub, and my full background is on
+        LinkedIn.
+      </p>
+      <ul class="mt-8 flex flex-wrap justify-center gap-4">
+        {
+          contactLinks.map((link) => (
+            <li>
+              <AppButton
+                href={link.href}
+                external={link.external}
+                variant={link.label === 'Email' ? 'primary' : 'secondary'}
+              >
+                {link.label}
+              </AppButton>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+  <footer class="border-t border-gray-700/60 py-6 text-center text-sm text-gray-400">
+    © {new Date().getFullYear()} Cyril Auquier · Built with Astro, Vue and Tailwind CSS
+  </footer>
 </Layout>
