@@ -1,9 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import AppMenu from '@/components/globals/AppMenu.vue'
-import AppButton from '@/components/globals/AppButton.vue'
-import AppCard from '@/components/globals/AppCard.vue'
-import SectionHeading from '@/components/globals/SectionHeading.vue'
+import PageSection from '@/components/globals/PageSection.vue'
 import PresentationView from '@/views/PresentationView.vue'
 import ProjectView from '@/views/ProjectView.vue'
 import SkillsView from '@/views/SkillsView.vue'
@@ -12,69 +10,134 @@ import { contactLinks } from '@/data/contact'
 
 const strengths = [
   {
-    title: 'I pick things up fast',
+    title: 'I pick things up fast.',
     text: "I like learning new technologies and ways of working, so an unfamiliar tool or codebase doesn't stop me for long.",
   },
   {
-    title: 'I ask before I build',
+    title: 'I ask before I build.',
     text: "I'd rather ask a question early than spend a week building something the client didn't want.",
   },
 ]
+
+const email = contactLinks.find((link) => link.label === 'Email')
+const otherLinks = contactLinks.filter((link) => link.label !== 'Email')
+
+const linkClass =
+  'rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-sun focus-visible:outline-none'
 ---
 
 <Layout>
   <a
     href="#main"
-    class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-md focus:bg-yellow-300 focus:px-4 focus:py-2 focus:text-gray-900"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-md focus:bg-sun focus:px-4 focus:py-2 focus:text-ink"
   >
     Skip to content
   </a>
   <AppMenu />
   <main id="main" class="mx-auto max-w-5xl px-4 md:px-8">
     <PresentationView />
+    <ProjectView />
+    <ExperiencesView />
+    <SkillsView />
 
-    <section id="strengths" class="py-16">
-      <SectionHeading eyebrow="About me" title="How I work" />
-      <div class="grid gap-6 md:grid-cols-2">
+    <PageSection id="about" title="How I work">
+      <div class="max-w-2xl space-y-5 text-lg leading-relaxed">
         {
           strengths.map((s) => (
-            <AppCard>
-              <h3 class="mb-2 text-lg font-semibold text-gray-100">{s.title}</h3>
-              <p class="leading-relaxed">{s.text}</p>
-            </AppCard>
+            <p>
+              <strong class="font-semibold text-white">{s.title}</strong> {s.text}
+            </p>
           ))
         }
       </div>
-    </section>
+    </PageSection>
 
-    <SkillsView />
-    <ProjectView />
-    <ExperiencesView />
-
-    <section id="contact" class="py-24 text-center">
-      <h2 class="text-3xl font-bold text-gray-100 md:text-4xl">Get in touch</h2>
-      <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed">
+    <PageSection id="contact" title="Contact">
+      <p class="max-w-2xl text-lg leading-relaxed">
         I'm looking for my next developer role. Email is the fastest way to reach me. My code is
         on GitHub, and my full background is on LinkedIn.
       </p>
-      <ul class="mt-8 flex flex-wrap justify-center gap-4">
+      {
+        email && (
+          <a
+            href={email.href}
+            class={`${linkClass} mt-6 inline-block py-1 text-2xl font-semibold tracking-tight break-all text-sun underline decoration-sun/40 underline-offset-[6px] hover:decoration-sun sm:text-3xl`}
+          >
+            {email.href.replace('mailto:', '')}
+          </a>
+        )
+      }
+      <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
         {
-          contactLinks.map((link) => (
-            <li>
-              <AppButton
-                href={link.href}
-                external={link.external}
-                variant={link.label === 'Email' ? 'primary' : 'secondary'}
-              >
-                {link.label}
-              </AppButton>
-            </li>
+          otherLinks.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={`${linkClass} py-2 text-white underline decoration-white/30 underline-offset-4 hover:text-sun hover:decoration-sun`}
+            >
+              {link.label}
+              <span class="sr-only">(opens in a new tab)</span>
+            </a>
           ))
         }
-      </ul>
-    </section>
+      </p>
+    </PageSection>
   </main>
-  <footer class="border-t border-gray-700/60 py-6 text-center text-sm text-gray-400">
-    © {new Date().getFullYear()} Cyril Auquier · Built with Astro, Vue and Tailwind CSS
+  <footer class="border-t border-white/10">
+    <div
+      class="mx-auto flex max-w-5xl flex-col gap-2 px-4 py-8 text-sm text-white/55 sm:flex-row sm:items-center sm:justify-between md:px-8"
+    >
+      <p>
+        © {new Date().getFullYear()} Cyril Auquier. Built with Astro and Vue,
+        <a
+          href="https://github.com/cyrilauq/portfolio"
+          target="_blank"
+          rel="noopener noreferrer"
+          class={`${linkClass} underline decoration-white/30 underline-offset-4 hover:text-sun`}
+          >source on GitHub</a
+        >.
+      </p>
+      <a href="#home" class={`${linkClass} py-2 hover:text-sun`}>
+        Back to top <span aria-hidden="true">↑</span>
+      </a>
+    </div>
   </footer>
 </Layout>
+
+<script>
+  // Highlights the nav link of the section currently on screen (sets aria-current).
+  // Plain script, no framework: the rest of the page stays static.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('nav[aria-label="Main"] ul a')]
+  const sections = links
+    .map((link) => document.getElementById(link.hash.slice(1)))
+    .filter((el): el is HTMLElement => el !== null)
+
+  let ticking = false
+  function update() {
+    ticking = false
+    const atBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 4
+    let current: HTMLElement | undefined = atBottom ? sections.at(-1) : undefined
+    if (!current) {
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= window.innerHeight * 0.35) current = section
+      }
+    }
+    for (const link of links) {
+      if (current && link.hash === `#${current.id}`) link.setAttribute('aria-current', 'true')
+      else link.removeAttribute('aria-current')
+    }
+  }
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(update)
+      }
+    },
+    { passive: true },
+  )
+  update()
+</script>

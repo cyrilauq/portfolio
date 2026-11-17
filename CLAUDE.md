@@ -23,17 +23,17 @@ There is no test suite. Note that `astro` itself is not listed in `package.json`
 ## Architecture
 
 - **`astro.config.mjs` is the real build config.** It wires the Vue integration, the Tailwind Vite plugin, the Vercel adapter (`output: 'server'`), and the `@` → `./src` alias. `vite.config.ts` and the README are leftovers from the original `create-vue` template and are not used by the Astro build — change settings in `astro.config.mjs`.
-- **Page composition:** `src/pages/index.astro` is the only page. It wraps everything in `src/layouts/Layout.astro` (which imports `src/styles/global.css` → `@import 'tailwindcss'`) and stacks the section components from `src/views/` (Presentation, Skills, Projects, Experiences). Some sections (Strengths, Links/contact) are written inline in `index.astro`.
-- **Hydration:** Vue components render as static HTML by default. Only components given a `client:*` directive in `index.astro` are interactive — currently none, so the page ships no JS. The generic auto-playing `AppSlider` (`src/components/sliders/`) is kept but unused. Any new component that needs reactivity/events in the browser must get a `client:` directive.
+- **Page composition:** `src/pages/index.astro` is the only page. It wraps everything in `src/layouts/Layout.astro` (which imports `src/styles/global.css` → `@import 'tailwindcss'`) and stacks the section components from `src/views/` (Presentation, Projects, Experiences, Skills, in that order). The About ("How I work") and Contact sections are written inline in `index.astro`.
+- **Hydration:** Vue components render as static HTML by default. Only components given a `client:*` directive in `index.astro` are interactive — currently none. The only client JS is a small plain `<script>` in `index.astro` that highlights the active nav link (`aria-current`). The generic auto-playing `AppSlider` (`src/components/sliders/`) is kept but unused. Any new component that needs reactivity/events in the browser must get a `client:` directive.
 - **Navigation:** `src/components/globals/AppMenu.vue` is a sticky nav of in-page anchor links (`#home`, `#skills`, `#projects`, …) that must match the `id` attributes of the section elements. Update both when adding/renaming a section.
-- **Content as data:** Portfolio content (projects, skills, experiences) is hardcoded as plain typed arrays inside each view's `<script setup>` (strengths live in the frontmatter of `index.astro`; contact links in `src/data/contact.ts`, shared by the hero and contact section). Edit those arrays to update content. Shared UI building blocks (`AppCard`, `AppButton`, `TagList`, `SectionHeading`) are in `src/components/globals/`.
+- **Content as data:** Portfolio content (projects, skills, experiences) is hardcoded as plain typed arrays inside each view's `<script setup>` (strengths live in the frontmatter of `index.astro`; contact links in `src/data/contact.ts`, shared by the hero and contact section). Edit those arrays to update content. Shared UI building blocks (`PageSection`, `AppButton`, `AppMenu`) are in `src/components/globals/`.
 
 ## Conventions
 
 - Vue SFCs use `<script setup lang="ts">`; TS has `noUncheckedIndexedAccess` enabled.
 - Prettier: no semicolons, single quotes, print width 100.
 - Linting is oxlint (correctness rules) + ESLint (`vue/flat/essential` + Vue TS recommended), with `eslint-plugin-oxlint` disabling ESLint rules oxlint already covers.
-- Styling is Tailwind utility classes inline in templates (gray-800 background, yellow-300 accents).
+- Styling is Tailwind utility classes inline in templates with a locked palette: two blacks (`ink`, `ink-raised`) and two yellows (`sun`, `sun-light`) defined in `src/styles/global.css`. Tailwind's default colors are disabled; text and borders use `white/<opacity>`.
 
 ## UI work
 

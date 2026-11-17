@@ -9,12 +9,19 @@ Read this whole file before writing UI. Then build the element, then run the che
 
 ## 1. Identity (do not drift from it)
 
-- **Dark, calm, single accent.** Background `bg-gray-800`, surfaces `bg-gray-900/40`, borders `border-gray-700`.
-  Body text `text-gray-300`, headings `text-gray-100`, secondary/meta `text-gray-400`, muted `text-gray-500`.
-  Accent is **`yellow-300` only** (hover `yellow-200`). Never add a second accent hue.
+- **Black and yellow, 2 shades each, nothing else** (user requirement). Tokens are in `src/styles/global.css`
+  (`@theme`; Tailwind's default palette is removed, so `gray-*` / `yellow-*` classes don't exist):
+  `ink` (page bg), `ink-raised` (raised surfaces, if ever needed), `sun` (accent), `sun-light` (accent hover).
+  Text and borders are white with opacity: headings `text-white`, body `text-white/70` (set on `body`),
+  meta `text-white/55`–`/60`, borders `border-white/10`. Text on yellow: `text-ink`.
+  Never add a new color token or hue.
 - **Font:** default Tailwind sans stack. No extra web fonts unless the user asks.
-- **Approved style is the "card" redesign** (rounded cards, pill tags, timeline, filled primary CTA).
-  A stripped résumé/minimal variant was tried and rejected by the user. Don't swing to that unless asked.
+- **Approved style: "human, editorial"** (2026-11, user asked for "less AI, more human"). Sections are
+  separated by a thin rule with the title in a left column; content is prose and plain lists, not cards.
+  Avoid AI-template tells: uppercase numbered eyebrows (`01 —— ABOUT`), pulsing "available" pills,
+  fake code/terminal windows, identical card grids, pill tags everywhere, ↗ icon circles, gradients.
+  The experience **timeline stays** (user requirement). History: a card-grid version preceded this one;
+  an earlier stripped résumé variant was rejected, so keep structure, hierarchy and the yellow accents.
 - One page, anchor-navigated. A portfolio does not need sub-pages (Pierre Burel, Matt Farley references).
 
 ## 2. Building blocks: reuse these exact patterns
@@ -22,25 +29,29 @@ Read this whole file before writing UI. Then build the element, then run the che
 | Element | Classes / component |
 |---|---|
 | Page container | `<main class="mx-auto max-w-5xl px-4 md:px-8">` (already in `index.astro`) |
-| Section | `<section id="…" class="py-16">` + `<SectionHeading eyebrow="…" title="…" />` from `@/components/globals/SectionHeading.vue` |
-| Card | `rounded-2xl border border-gray-700 bg-gray-900/40 p-6` |
-| Card title | `text-lg font-semibold text-gray-100` (project cards: `text-xl`) |
-| Tag / chip | `<li class="rounded-full bg-gray-700/60 px-3 py-1 text-xs text-gray-200">` inside `<ul class="flex flex-wrap gap-2">` (`text-sm` for skills) |
-| Primary button | `rounded-lg bg-yellow-300 px-5 py-3 font-semibold text-gray-900 hover:bg-yellow-200` |
-| Secondary button | `rounded-lg border border-gray-600 px-5 py-3 font-semibold text-gray-100 hover:border-yellow-300 hover:text-yellow-300` |
-| Inline/text link | `text-yellow-300` or `hover:text-yellow-300` |
-| Grid of cards | `grid gap-6 sm:grid-cols-2` or `md:grid-cols-3` |
-| Dates | `text-sm text-gray-400 tabular-nums`, format `02/2025 — Present` |
+| Section | `<PageSection id="…" title="…" note?="…">` (`@/components/globals/PageSection.vue`): top rule, title in a sticky left column on `md`, content on the right |
+| Item title | `text-xl`/`text-2xl font-semibold tracking-tight text-white` |
+| List of items | `<ul class="divide-y divide-white/10">`, items `py-10 first:pt-0 last:pb-0` (projects) |
+| Stack / tech list | Plain text, `text-sm text-white/55`, joined with ` · `. No pill tags. |
+| Bullet notes | `relative pl-5` + a short yellow dash (`before:h-px before:w-2.5 before:bg-sun`) |
+| Primary button | `AppButton variant="primary"` (`bg-sun text-ink hover:bg-sun-light`). One per screen at most (hero "Email me"). |
+| Text link | `text-white underline decoration-white/30 underline-offset-4 hover:text-sun hover:decoration-sun`; live-site links `text-sun` |
+| Experience | Vertical timeline in `ExperiencesView`: line on the left, filled dot = job, hollow dot = school |
+| Dates | `text-sm text-white/60 tabular-nums`, format `02/2025 – Present` |
+| External-link arrow | `&#x2197;&#xFE0E;` (the `FE0E` stops Windows rendering it as a blue emoji) |
 
 Every interactive element also gets
-`transition-colors focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:outline-none`.
+`transition-colors focus-visible:ring-2 focus-visible:ring-sun focus-visible:outline-none`.
+
+Nav: the active link gets `aria-current="true"` from the small script in `index.astro` and is styled with `aria-[current=true]:`.
 
 If a pattern is needed twice or more, extract a component in `src/components/globals/` instead of copy-pasting long class strings.
 
 ## 3. Layout & spacing rules
 
 - Mobile first: design for ~360px, then add `sm:`/`md:` columns. No horizontal page scroll, ever.
-- Vertical rhythm: sections `py-16`, heading→content `mb-10` (handled by SectionHeading), card internals `gap-4`, grids `gap-6`.
+- Vertical rhythm: sections `py-16 md:py-24` (handled by `PageSection`), items `py-10`, grids `gap-8`+.
+- Page order follows what recruiters look for: hero → projects → experience → skills → about → contact.
 - Text blocks: `leading-relaxed`, cap width (`max-w-xl` … `max-w-3xl`). **Never `text-justify`.**
 - Left-align content. Center only short standalone blocks (contact CTA, footer).
 - New section → add its `id` and, if it belongs in the nav, a matching link in `AppMenu.vue` **in page order**.
@@ -48,7 +59,7 @@ If a pattern is needed twice or more, extract a component in `src/components/glo
 ## 4. UX rules (learned from the reference portfolios)
 
 - **The first screen answers "who, what, next step"**: name, role, one-sentence pitch, a primary CTA. (Matt Farley: the offer is clear immediately.)
-- **Projects are the proof.** Each project shows name, one-line outcome-focused description, stack tags, and a working link (live and/or repo). Whole card clickable via a stretched link (`after:absolute after:inset-0`). With many projects, add tech filters (caferati.me). Give each project something visually distinct when screenshots exist (Raoul Gaillard).
+- **Projects are the proof.** Each project shows name, a one-line summary, short factual build notes (problem / approach / how it's built, only things that are true in the repo, never invented), the stack, and working links (live and repo). With many projects, add tech filters (caferati.me). Give each project something visually distinct when screenshots exist (Raoul Gaillard).
 - **Easy navigation:** sticky nav, `scroll-pt-*` offset so headings aren't hidden, nothing that needs a map to understand.
 - **Contact is always one click away**: GitHub, LinkedIn, email in the hero or nav *and* at the bottom.
 - **Show, don't claim.** Prefer real artefacts (live links, repos, certificates, a CV download) over adjectives. **No skill-percentage bars.** They mean nothing to recruiters (seen on mbitu-portfolio, avoid).
@@ -70,7 +81,7 @@ If a pattern is needed twice or more, extract a component in `src/components/glo
 ## 7. Accessibility (non-negotiable)
 
 - Semantic tags: `section`/`article`/`ul`/`ol`/`h2`→`h3` in order; one `h1` (hero).
-- Contrast: body text never darker than `gray-400` on `gray-800`.
+- Contrast: body text never below `text-white/55` on `ink`.
 - Every icon-only control has `aria-label`; decorative elements `aria-hidden="true"`.
 - External links: `target="_blank" rel="noopener noreferrer"` + `sr-only` hint when the link text is ambiguous.
 - Images: real `alt`, never `src=""`.

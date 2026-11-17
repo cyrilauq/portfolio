@@ -1,108 +1,111 @@
 <script lang="ts" setup>
-import AppCard from '@/components/globals/AppCard.vue'
-import SectionHeading from '@/components/globals/SectionHeading.vue'
-import TagList from '@/components/globals/TagList.vue'
+import PageSection from '@/components/globals/PageSection.vue'
 
 interface Project {
   name: string
-  description: string
-  githubLinks: Array<{ name: string; url: string }>
+  /** One sentence: what it is for. */
+  summary: string
+  /** Short factual notes on how it is built. Only write what is true and checkable in the repo. */
+  details?: string[]
+  stack: string[]
   liveLink?: string
-  skills: string[]
+  repos: Array<{ label: string; url: string }>
 }
 
+// Strongest full-stack proof first.
 const projects: Project[] = [
   {
+    name: 'Inkukan',
+    summary: 'A web app to keep track of a manga collection.',
+    details: [
+      'ASP.NET Core API split into API and infrastructure projects, with a separate Vue front end.',
+      'Entity Framework Core with migrations, JWT authentication and a seeded admin account.',
+      'Files stored on Vercel Blob storage.',
+    ],
+    stack: ['ASP.NET Core', 'Entity Framework Core', 'Vue.js 3'],
+    liveLink: 'https://inkukan.be',
+    repos: [
+      { label: 'API code', url: 'https://github.com/cyrilauq/inkukan.api' },
+      { label: 'Front-end code', url: 'https://github.com/cyrilauq/inkukan.web' },
+    ],
+  },
+  {
     name: 'Sumptum',
-    description: 'Track and manage your expenses.',
+    summary: 'Track and manage your expenses.',
+    stack: ['ASP.NET Core', 'Vue.js 3'],
     liveLink: 'https://www.sumptum.be',
-    githubLinks: [{ name: 'all', url: 'https://github.com/cyrilauq/shuppi' }],
-    skills: ['ASP.NET Core', 'Vue.js 3'],
+    repos: [{ label: 'Code', url: 'https://github.com/cyrilauq/shuppi' }],
   },
   {
     name: 'Career Vault',
-    description: 'Keep track of your job applications.',
+    summary: 'Keep track of your job applications.',
+    stack: ['Vue.js 3', 'Firebase'],
     liveLink: 'https://career-vault-258c9.web.app',
-    githubLinks: [],
-    skills: ['Firebase', 'Vue.js 3'],
+    repos: [],
   },
   {
-    name: 'Inkukan',
-    description: 'Manage your manga collection.',
-    liveLink: 'https://inkukan.be',
-    githubLinks: [
-      { name: 'api', url: 'https://github.com/cyrilauq/inkukan.api' },
-      { name: 'front', url: 'https://github.com/cyrilauq/inkukan.web' },
+    name: 'This portfolio',
+    summary: 'The site you are on.',
+    details: [
+      'Astro renders the Vue components to plain HTML, so the page only ships a few lines of JavaScript.',
     ],
-    skills: ['Vue.js 3', 'ASP.NET Core'],
-  },
-  {
-    name: 'Portfolio',
-    description: 'Manage your manga collection.',
+    stack: ['Astro', 'Vue.js 3', 'Tailwind CSS'],
     liveLink: 'https://cyrilauquier.dev',
-    githubLinks: [{ name: 'front', url: 'https://github.com/cyrilauq/portfolio' }],
-    skills: ['Vue.js 3', 'Astro.JS'],
+    repos: [{ label: 'Code', url: 'https://github.com/cyrilauq/portfolio' }],
   },
 ]
 
-const repoLabels: Record<string, string> = { all: 'Code', api: 'API code', front: 'Front-end code' }
-const repoLabel = (name: string) => `GitHub: ${repoLabels[name] ?? name}`
-
 const host = (url: string) => new URL(url).hostname.replace(/^www\./, '')
+
+const linkClass =
+  'rounded-md py-2 transition-colors focus-visible:ring-2 focus-visible:ring-sun focus-visible:outline-none'
 </script>
 
 <template>
-  <section id="projects" class="py-16">
-    <SectionHeading eyebrow="Side projects, all live" title="Projects" />
-    <div class="grid gap-6 sm:grid-cols-2">
-      <AppCard
-        v-for="project in projects"
-        :key="project.name"
-        :interactive="!!project.liveLink"
-        class="flex flex-col gap-4"
-      >
-        <div>
-          <h3 class="text-xl font-semibold text-gray-100 group-hover:text-yellow-300">
-            {{ project.name }}
-          </h3>
-          <p v-if="project.liveLink" class="mt-1 text-sm text-gray-400">
-            {{ host(project.liveLink) }}
-          </p>
-        </div>
-        <p class="flex-1 leading-relaxed">{{ project.description }}</p>
-        <TagList :items="project.skills" label="Technologies" />
-        <div class="flex flex-wrap items-center gap-x-6 gap-y-1">
-          <!-- Stretched link: the whole card opens the live site -->
+  <PageSection id="projects" title="Projects" note="Built on my own time. All of them are online.">
+    <ul class="divide-y divide-white/10">
+      <li v-for="project in projects" :key="project.name" class="py-10 first:pt-0 last:pb-0">
+        <h3 class="text-2xl font-semibold tracking-tight text-white">{{ project.name }}</h3>
+        <p class="mt-2 max-w-2xl text-lg leading-relaxed text-white/85">{{ project.summary }}</p>
+
+        <ul v-if="project.details" class="mt-4 max-w-2xl space-y-2">
+          <li
+            v-for="detail in project.details"
+            :key="detail"
+            class="relative pl-5 leading-relaxed before:absolute before:top-[0.7em] before:left-0 before:h-px before:w-2.5 before:bg-sun"
+          >
+            {{ detail }}
+          </li>
+        </ul>
+
+        <p class="mt-4 text-sm text-white/55">
+          <span class="sr-only">Built with: </span>{{ project.stack.join(' · ') }}
+        </p>
+
+        <p class="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm">
           <a
             v-if="project.liveLink"
             :href="project.liveLink"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 py-2 font-medium text-yellow-300 after:absolute after:inset-0 after:rounded-2xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-yellow-300"
+            :class="[linkClass, 'font-medium text-sun hover:text-sun-light']"
           >
-            Visit site
-            <span
-              aria-hidden="true"
-              class="transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
-              >→</span
-            >
+            {{ host(project.liveLink) }} <span aria-hidden="true">&#x2197;&#xFE0E;</span>
             <span class="sr-only">(opens {{ project.name }} in a new tab)</span>
           </a>
-          <span v-else class="py-2 text-sm text-gray-400">Not live yet</span>
-          <!-- relative z-10 lifts repo links above the stretched link so they stay clickable -->
           <a
-            v-for="repo in project.githubLinks"
+            v-for="repo in project.repos"
             :key="repo.url"
             :href="repo.url"
             target="_blank"
             rel="noopener noreferrer"
-            class="relative z-10 rounded-md py-2 text-sm text-gray-400 transition-colors hover:text-yellow-300 focus-visible:ring-2 focus-visible:ring-yellow-300 focus-visible:outline-none"
+            :class="[linkClass, 'text-white/70 hover:text-white']"
           >
-            {{ repoLabel(repo.name) }}
+            {{ repo.label }} on GitHub
             <span class="sr-only">for {{ project.name }} (opens in a new tab)</span>
           </a>
-        </div>
-      </AppCard>
-    </div>
-  </section>
+        </p>
+      </li>
+    </ul>
+  </PageSection>
 </template>

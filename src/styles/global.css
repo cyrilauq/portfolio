@@ -1,1 +1,30 @@
 @import 'tailwindcss';
+
+/*
+ * Palette: two blacks + two yellows, nothing else.
+ * `--color-*: initial` removes Tailwind's default colors, so a class like `bg-gray-800`
+ * simply won't exist. Text and borders use white with opacity (`text-white/70`, `border-white/10`).
+ */
+@theme {
+  --color-*: initial;
+  --color-white: #fff;
+
+  --color-ink: #0c0c0d; /* page background */
+  --color-ink-raised: #18181b; /* cards, nav, code block */
+
+  --color-sun: #facc15; /* accent: CTA, links, timeline dots */
+  --color-sun-light: #fde68a; /* hover state of the accent */
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+}
